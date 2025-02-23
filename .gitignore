@@ -1,9 +1,3 @@
 # Ignore environment-sensitive files
-config/config.php
 uploads/
 vendor/
-composer.lock
-
-# Ignore system files
-.DS_Store
-Thumbs.db
