@@ -1,5 +1,35 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Allow CORS (For API Requests)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "https://recipix.netlify.app"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    Header set Access-Control-Allow-Credentials "true"
+</IfModule>
+
+# Redirect all requests to index.php (if needed)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [QSA,L]
+
+# Disable Directory Listing (Security)
 Options -Indexes
+
+# Prevent Access to Sensitive Files
+<FilesMatch "^(composer\.json|composer\.lock|\.env|config\.php|\.htaccess)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Protect Image Files (Optional)
 <FilesMatch "\.(jpg|jpeg|png|gif)$">
     Order Deny,Allow
     Deny from all
 </FilesMatch>
+
+# Remove .php Extension (Optional)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
